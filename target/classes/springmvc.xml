@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                            http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/context
+                            http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tool http://www.springframework.org/schema/tool/spring-tool.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+    <!--开启注解扫描-->
+    <context:component-scan base-package="com.controller"/>
+
+    <!--处理器映射器：解析请求路径，处理请求-->
+<!--    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />-->
+    <!--处理器适配器：绑定参数-->
+<!--    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"></bean>-->
+    <!-- 做完以上两步，才会进入我们的后台控制器 -->
+
+    <!--(开启注解式驱动)提供新的命名空间，对上面两个的替换，底层就是封装了上面两个东西-->
+    <mvc:annotation-driven />
+
+    <!--视图解析器：如果有页面跳转，会经过视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--前缀-->
+        <property name="prefix" value="/"/>
+        <!--后缀-->
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--
+    开启注解扫描：
+        <context:component-scan base-package="...java包为根目录下的路径..."/>    - 1
+    SpringMVC三大组件：
+        处理器映射器RequestMappingHandlerMapping、
+        处理器适配器RequestMappingHandlerAdapter、（以上2个用"<mvc:annotation-driven/>"替换）  - 2
+        视图解析器InternalResourceViewResolver   - 3
+    -->
+
+    <!--放行静态资源-->
+    <mvc:default-servlet-handler />
+        <!--web.xml中的配置拦截了/的所有请求，页面中所有以/开头的请求都会被当作一个控制器（例如输入/test时进入注解Mapping为test的控制器）去处理，
+                加上以上这个标签，可以改变了整个解析请求的顺序，先去找静态资源，当静态资源都找不到的时候，才去控制器中找合适的映射。-->
+
+</beans>
